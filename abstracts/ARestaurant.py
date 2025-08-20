@@ -18,11 +18,15 @@ class ARestaurant:
             "units": DISTANCE_UNITS.M
         }
         self.menu = None
+        self.menu_link = ""
 
     @abc.abstractmethod
     def set_distance(self, distance: float, units: DISTANCE_UNITS):
         raise NotImplementedError("set_distance has to be implemented!")
 
     @abc.abstractmethod
+    def fetch_menu(self):
+        raise NotImplementedError("fetch_menu has to be implemented!")
+
     def add_menu(self, menu: AMenu):
-        raise NotImplementedError("add_menu has to be implemented!")
+        self.menu = menu
