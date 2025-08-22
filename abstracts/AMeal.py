@@ -1,7 +1,7 @@
 import enum
 import typing
 
-class MEAL_AMOUNT_UNITS(enum.StrEnum):
+class MEAL_AMOUNT_UNITS(enum.Enum):
     NONE = ""
     L = "liters"
     ML = "milli liters"
@@ -13,11 +13,16 @@ ALLERGENS_EN = ["Wheats", "Crustatians", "Eggs", "Fish", "Almonds", "Soy", "Milk
 class AMeal:
     def __init__(self):
         self.name = None
+        self.detailed_description = None
         self.allergens = dict.fromkeys(range(14), False)
         self.amount = {
             "amount": 0.0,
             "units": MEAL_AMOUNT_UNITS.NONE
         }
+        self.price = 0
+
+    def set_detailed_description(self, description: str):
+        self.detailed_description = description
 
     def set_name(self, name: str):
         self.name = name
@@ -31,3 +36,8 @@ class AMeal:
     def set_amount(self, amount: float, unit: MEAL_AMOUNT_UNITS):
         self.amount["amount"] = amount
         self.amount["units"] = unit
+        
+    def set_price(self, price, is_euro = False):
+        if is_euro:
+            price *= 
+        self.price = price
