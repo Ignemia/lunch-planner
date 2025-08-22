@@ -100,10 +100,8 @@ class Concordia(ARestaurant):
             price_czk_match = re.match(r"\d+", price_soup)
             if price_czk_match is not None:
                 main_meal_item.set_price(int(price_czk_match[0]))
-            print(mm_.text)
             main_meal_description_match = re.search(r"\W\s(?P<description>[a-záéíóúčďňřěťžýš\s\,\.]+)", mm_.text, re.MULTILINE)
             if main_meal_description_match is not None:
-                print(main_meal_description_match.group("description").strip())
                 main_meal_item.set_detailed_description(main_meal_description_match.group("description").strip())
             menu.add_mainmeal(main_meal_item)
 
