@@ -1,10 +1,11 @@
-from restaurants import Bruxx, NaPasece
+from restaurants import Bruxx, NaPasece, PizzeriaEinstein
 
 REGISTERED_RESTAURANTS = set()
 
 def initialize_restaurants():
     REGISTERED_RESTAURANTS.add(Bruxx())
     REGISTERED_RESTAURANTS.add(NaPasece())
+    REGISTERED_RESTAURANTS.add(PizzeriaEinstein())
 
 if __name__ == "__main__":
     initialize_restaurants()
