@@ -1,6 +1,8 @@
 import enum
 import typing
 
+from utils import convert_eur_to_czk
+
 class MEAL_AMOUNT_UNITS(enum.Enum):
     NONE = ""
     L = "liters"
@@ -36,8 +38,8 @@ class AMeal:
     def set_amount(self, amount: float, unit: MEAL_AMOUNT_UNITS):
         self.amount["amount"] = amount
         self.amount["units"] = unit
-        
+
     def set_price(self, price, is_euro = False):
         if is_euro:
-            price *= 
+            price = convert_eur_to_czk(price)
         self.price = price
