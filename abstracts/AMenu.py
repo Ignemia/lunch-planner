@@ -17,12 +17,13 @@ class AMenu:
         return self.restaurant
 
     @abc.abstractmethod
-    def add_drink(self, name: str, volume: float) -> bool:
+    def add_drink(self, name: str, volume: float, price_czk: int) -> bool:
         '''
         Adds drink to menu
 
         @param: [name: <str>] name of the drink as provided on the menu
         @param: [volume: <float>] amount of drink in millilitres
+        @param: [price_czk: <float>] Drink price in czech crowns
         @returns: <bool>
             - True:     Drink added successfully
             - False:    Adding drink failed
@@ -62,7 +63,7 @@ class AMenu:
             for id, drink in enumerate(self.drinks):
                 out += f"\t\t{(id+1)} - {str(drink)}\n"
         if len(self.meals["soups"]) > 0:
-            out += "Soups:\n"
+            out += "\tSoups:\n"
             for id, soup in enumerate(self.meals["soups"]):
                 out += f"\t\t{(id+1)} - {str(soup)}\n"
         out += "\tMain Meals:\n"
