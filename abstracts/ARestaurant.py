@@ -2,9 +2,9 @@ import abc
 import typing
 import enum
 
-from AMenu import AMenu
+from . import AMenu
 
-class DISTANCE_UNITS(enum.StrEnum):
+class DISTANCE_UNITS(enum.Enum):
     M = "meters"
     KM = "kilometers"
     MI = "Miles"
@@ -30,3 +30,12 @@ class ARestaurant:
 
     def add_menu(self, menu: AMenu):
         self.menu = menu
+
+    def get_name(self):
+        return self.name
+
+    def get_distance(self):
+        return self.distance["distance"]
+
+    def get_menu_string(self):
+        return str(self.menu)

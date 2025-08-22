@@ -43,3 +43,6 @@ class AMeal:
         if is_euro:
             price = convert_eur_to_czk(price)
         self.price = price
+
+    def __str__(self) -> str:
+        return f"{self.name}({(((ALLERGENS_EN[a] + ', ') if a else '') for a in self.allergens)}) {self.amount['amount']}{self.amount['units'].value} - {self.price}czk"

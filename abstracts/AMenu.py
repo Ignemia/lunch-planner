@@ -1,8 +1,8 @@
 import abc
 import typing
 
-from ARestaurant import ARestaurant
-from AMeal import AMeal
+from .ARestaurant import ARestaurant
+from .AMeal import AMeal
 
 class AMenu:
     def __init__(self):
@@ -54,3 +54,18 @@ class AMenu:
             - False:    Adding main meal failed
         '''
         raise NotImplementedError("add_mainmeal method has to be implemented")
+
+    def __str__(self) -> str:
+        out = ""
+        if len(self.drinks) > 0:
+            out += "Drinks:\n"
+            for id, drink in enumerate(self.drinks):
+                out += f"\t\t{(id+1)} - {str(drink)}\n"
+        if len(self.meals["soups"]) > 0:
+            out += "Soups:\n"
+            for id, soup in enumerate(self.meals["soups"]):
+                out += f"\t\t{(id+1)} - {str(soup)}\n"
+        out += "\tMain Meals:\n"
+        for id, mm in enumerate(self.meals["main_meals"]):
+            out += f"\t\t{(id+1)} - {str(mm)}\n"
+        return out
