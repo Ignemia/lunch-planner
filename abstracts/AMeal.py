@@ -45,4 +45,4 @@ class AMeal:
         self.price = price
 
     def __str__(self) -> str:
-        return f"{self.name}({(((ALLERGENS_EN[a] + ', ') if a else '') for a in self.allergens)}) {self.amount['amount']}{self.amount['units'].value} - {self.price}czk"
+        return f"{self.name}({[a+1 for a in self.allergens if self.allergens[a]]}){(self.amount['amount'] if self.amount['amount'] > 0 else '')}{self.amount['units'].value if self.amount['amount'] > 0 else ''} - {self.price}czk"
