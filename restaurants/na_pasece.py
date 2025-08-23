@@ -54,14 +54,17 @@ class NaPasece(ARestaurant):
         soups = __menu_html.findAll(class_="polevka")
         for s_ in soups:
             allergen_badges = s_.findAll("em")
-            price_soup = s_.find(class_="cena").text
+            price_soup = s_.find(class_="cena")
+            if price_soup is None:
+                continue
+            price_text = price_soup.text
             match = re.search(r"^(\d+)?\.?\s?(?P<amount>\d+)?(?P<units>g)?\s?(?P<soup_name>[\D]+(?:,\s[\D]+)*)\s(?P<allergens>(?:\d{1,2}(?:,\s?)*)*)", s_.find(class_="polozka").text)
             if match is None:
                 continue
             name = match.group("soup_name").strip()
             allergens = [int(al.text) for al in allergen_badges]
             soup_item = Soup(name, 0, MEAL_AMOUNT_UNITS.ML, allergens)
-            price_czk_match = re.match(r"\d+", price_soup)
+            price_czk_match = re.match(r"\d+", price_text)
             if price_czk_match is not None:
                 soup_item.set_price(int(price_czk_match[0]))
             menu.add_soup(soup_item)

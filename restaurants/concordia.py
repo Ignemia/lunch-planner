@@ -63,7 +63,10 @@ class Concordia(ARestaurant):
         # Parsing soups and drinks
         soups = __menu_html.findAll(class_="polevka")
         for s_ in soups:
-            price_soup = s_.find(class_="cena").text
+            price_soup = s_.find(class_="cena")
+            if price_soup is None:
+                continue
+            price_html = price_soup.text
             # Check if this is a drink (contains volume in liters)
             drink_match = re.search(r"^.*(\d+[\.,]?\d*)\s*L", s_.text, re.IGNORECASE | re.MULTILINE)
             if drink_match:
@@ -72,7 +75,7 @@ class Concordia(ARestaurant):
                 drink_volume_match = re.match(r".*(\d+\,\s\d+)L", drink_match[0], re.IGNORECASE)
                 assert drink_volume_match is not None
                 volume = float(drink_volume_match.group(1).replace(",", ".").replace(" ", ""))
-                price_czk_match = re.match(r"\d+", price_soup)
+                price_czk_match = re.match(r"\d+", price_html)
                 assert price_czk_match is not None
 
                 menu.add_drink(drink_name_match[0].strip(), volume, int(price_czk_match[0]))

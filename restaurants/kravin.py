@@ -56,10 +56,13 @@ class Kravin(ARestaurant):
         # Parsing soups
         soups = __menu_html.findAll(class_="polevka")
         for s_ in soups:
-            price_soup = s_.find(class_="cena").text
+            price_soup = s_.find(class_="cena")
+            if price_soup is None:
+                continue
+            price_text = price_soup.text
             name = s_.find(class_="polozka").text.strip()
             soup_item = Soup(name, 0, MEAL_AMOUNT_UNITS.ML, [])
-            price_czk_match = re.match(r"\d+", price_soup)
+            price_czk_match = re.match(r"\d+", price_text)
             if price_czk_match is not None:
                 soup_item.set_price(int(price_czk_match[0]))
             menu.add_soup(soup_item)
