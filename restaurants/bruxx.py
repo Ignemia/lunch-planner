@@ -54,7 +54,10 @@ class Bruxx(ARestaurant):
         soups = __menu_html.findAll(class_="polevka")
         for s_ in soups:
             allergen_badges = s_.findAll("em")
-            price_soup = s_.find(class_="cena").text
+            price_soup = s_.find(class_="cena")
+            if price_soup is None:
+                continue
+            price_text = price_soup.text
             match = re.search(r"^(?P<soup_name>.*)\s?(?P<amount>\d+[\,\.\s_]+?\d+)\s?(?P<units>m?l)", s_.find(class_="polozka").text)
             if match is None:
                 continue
@@ -66,7 +69,7 @@ class Bruxx(ARestaurant):
             if units != 'ml':
                 volume *= 1000
             soup_item = Soup(name, volume, MEAL_AMOUNT_UNITS.ML, allergens)
-            price_czk_match = re.match(r"\d+", price_soup)
+            price_czk_match = re.match(r"\d+", price_text)
             if price_czk_match is not None:
                 soup_item.set_price(int(price_czk_match[0]))
             menu.add_soup(soup_item)
