@@ -28,10 +28,9 @@ class PizzeriaEinsteinMenu(AMenu):
             return True
         except:
             return False
-
 class PizzeriaEinstein(ARestaurant):
     def __init__(self):
-        ARestaurant.__init__(self, "Pizzeria Einstein")
+        ARestaurant.__init__(self, "PizzeriaEinstein")
         self.menu_link = "https://www.menicka.cz/9400-pizzeria-einstein-vinohrady.html"
         self.distance = {
             "distance": 0,

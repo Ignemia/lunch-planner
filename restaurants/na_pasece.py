@@ -30,7 +30,7 @@ class NaPaseceMenu(AMenu):
 
 class NaPasece(ARestaurant):
     def __init__(self):
-        ARestaurant.__init__(self, "Na Pasece")
+        ARestaurant.__init__(self, "NaPasece")
         self.menu_link = "https://www.menicka.cz/2028-restaurace-na-pasece.html"
         self.distance = {
             "distance": 0,

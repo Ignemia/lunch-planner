@@ -1,0 +1,87 @@
+/* static/styles.css */
+body {
+    font-family: "Poppins", sans-serif;
+}
+
+/* Restaurant Card (Island) Styling */
+.restaurant-card {
+    @apply bg-white p-6 rounded-xl shadow-lg flex flex-col transition-transform duration-300 hover:-translate-y-2;
+}
+
+.card-header {
+    @apply flex items-center gap-3 mb-4;
+}
+
+.user-indicator {
+    @apply flex items-center justify-center w-7 h-7 text-sm font-bold text-white rounded-full;
+}
+.user-indicator.green {
+    @apply bg-green-500;
+}
+.user-indicator.red {
+    @apply bg-red-500;
+}
+
+.card-header h3 {
+    @apply text-2xl font-semibold text-slate-700;
+}
+
+.card-body {
+    @apply flex-grow space-y-4; /* Pushes button to the bottom */
+}
+
+.menu-section h4 {
+    @apply text-lg font-semibold text-slate-600 border-b-2 border-slate-200 pb-1 mb-2;
+}
+
+.menu-section ul {
+    @apply list-none p-0 space-y-1;
+}
+
+.menu-section li {
+    @apply flex justify-between text-sm text-slate-500;
+}
+
+.card-footer {
+    @apply mt-6; /* Margin top to create space */
+}
+
+.join-button {
+    @apply w-full bg-green-500 text-white font-bold py-3 px-5 rounded-lg transition-all duration-300 hover:bg-green-600 hover:shadow-md text-lg;
+}
+
+/* Detailed Menu Styling */
+.detailed-menu-item {
+    @apply border p-3 rounded-md;
+}
+.detailed-menu-item-header {
+    @apply flex justify-between font-semibold;
+}
+.detailed-menu-item-description {
+    @apply text-sm text-slate-500 mt-1;
+}
+
+/* Chat Styling */
+.chat-message {
+    @apply p-3 rounded-lg max-w-xs;
+}
+
+.chat-message.self {
+    @apply bg-green-100 text-green-900 self-end;
+    margin-left: auto; /* Pushes message to the right */
+}
+
+.chat-message.other {
+    @apply bg-slate-200 text-slate-900 self-start;
+    margin-right: auto; /* Pushes message to the left */
+}
+
+#chat-messages {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Utility class */
+.hidden {
+    display: none;
+}

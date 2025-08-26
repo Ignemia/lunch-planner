@@ -45,4 +45,8 @@ class AMeal:
         self.price = price
 
     def __str__(self) -> str:
-        return f"{self.name}({[a+1 for a in self.allergens if self.allergens[a]]}){(self.amount['amount'] if self.amount['amount'] > 0 else '')}{self.amount['units'].value if self.amount['amount'] > 0 else ''} - {self.price}czk{(' | ' + self.detailed_description) if self.detailed_description else ""}"
+        return f"{self.name}({[a+1 for a in self.allergens if self.allergens[a]]})\
+        {(self.amount['amount'] if self.amount['amount'] > 0 else '')}\
+        {self.amount['units'].value if self.amount['amount'] > 0 else ''}\
+        - {self.price}czk\
+        {(' | ' + self.detailed_description) if self.detailed_description else ''}"

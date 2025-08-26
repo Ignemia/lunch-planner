@@ -1,6 +1,7 @@
 import abc
 import typing
 import enum
+from typing_extensions import ClassVar, Dict
 
 from . import AMenu
 
@@ -11,6 +12,8 @@ class DISTANCE_UNITS(enum.Enum):
     YARDS = "Yards"
 
 class ARestaurant:
+    Instances: ClassVar[Dict] = {}
+
     def __init__(self, name):
         self.name = name
         self.distance = {
@@ -19,6 +22,14 @@ class ARestaurant:
         }
         self.menu = None
         self.menu_link = ""
+        if name not in ARestaurant.Instances:
+             ARestaurant.Instances[name] = self
+
+    @staticmethod
+    def get_instance(impl, name: str):
+        if name not in ARestaurant.Instances:
+            impl()
+        return ARestaurant.Instances[name]
 
     @abc.abstractmethod
     def set_distance(self, distance: float, units: DISTANCE_UNITS):
@@ -39,3 +50,6 @@ class ARestaurant:
 
     def get_menu_string(self):
         return str(self.menu)
+
+    def get_menu(self):
+        return self.menu

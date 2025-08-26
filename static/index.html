@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Lunch Group Planner</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+            rel="stylesheet"
+        />
+        <link href="/static/styles.css" rel="stylesheet" />
+    </head>
+    <body class="bg-slate-100 text-slate-800">
+        <div class="max-w-screen-xl mx-auto px-4 py-8">
+            <header class="text-center mb-10">
+                <h1 class="text-4xl font-bold text-slate-800">
+                    Lunch Group Planner
+                </h1>
+                <p class="text-slate-500 mt-2">
+                    Choose a restaurant and coordinate with your group.
+                </p>
+            </header>
+
+            <main id="restaurants-view">
+                <div
+                    id="restaurants-list"
+                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                ></div>
+            </main>
+
+            <main id="joined-view" class="hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 id="joined-header" class="text-3xl font-bold"></h2>
+                    <button
+                        id="leave-button"
+                        class="bg-red-500 text-white font-semibold py-2 px-5 rounded-lg hover:bg-red-600 transition-colors"
+                    >
+                        Leave Group
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div
+                        id="detailed-menu-container"
+                        class="bg-white p-6 rounded-lg shadow-md"
+                    >
+                        <h3 class="text-2xl font-semibold border-b pb-3 mb-4">
+                            Full Menu
+                        </h3>
+                        <div id="detailed-menu-content" class="space-y-4"></div>
+                    </div>
+
+                    <div
+                        id="chat-container"
+                        class="bg-white p-6 rounded-lg shadow-md flex flex-col"
+                    >
+                        <h3 class="text-2xl font-semibold border-b pb-3 mb-4">
+                            Group Chat
+                        </h3>
+                        <div
+                            id="chat-messages"
+                            class="flex-grow space-y-3 overflow-y-auto h-96 pr-2"
+                        ></div>
+                        <form id="chat-form" class="mt-4 flex gap-3">
+                            <input
+                                type="text"
+                                id="chat-input"
+                                placeholder="Type your message..."
+                                class="flex-grow border-slate-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+                                autocomplete="off"
+                            />
+                            <button
+                                type="submit"
+                                class="bg-green-500 text-white font-semibold py-2 px-5 rounded-lg hover:bg-green-600 transition-colors"
+                            >
+                                Send
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <script src="/static/main.js"></script>
+    </body>
+</html>

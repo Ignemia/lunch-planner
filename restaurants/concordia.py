@@ -95,6 +95,8 @@ class Concordia(ARestaurant):
         for mm_ in main_meals:
             price_soup = mm_.find(class_="cena").text
             main_meal_name_match = re.search(r"(?P<name>[A-ZÁÉĚÍÓÚČĎŘŤŽ\s]+)\s\W.*", mm_.text)
+            if main_meal_name_match is None:
+                continue
             assert main_meal_name_match is not None
             main_meal_item = MainMeal(main_meal_name_match.group("name").strip(), 0, MEAL_AMOUNT_UNITS.ML, [])
             price_czk_match = re.match(r"\d+", price_soup)
