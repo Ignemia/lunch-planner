@@ -84,7 +84,7 @@ class Concordia(ARestaurant):
                 soup_name_match = re.match(r"^(?P<name>[A-ZÁÉĚÍÓÚČĎŘŤŽ\s]+)\s\W", s_.text)
                 assert soup_name_match is not None
                 soup_item = Soup(soup_name_match.group("name").strip(), 0, MEAL_AMOUNT_UNITS.ML, [])
-                price_czk_match = re.match(r"\d+", price_soup)
+                price_czk_match = re.match(r"\d+", price_soup.text)
                 if price_czk_match is not None:
                     soup_item.set_price(int(price_czk_match[0]))
                 soup_description_match = re.match(r"^(?P<name>[A-ZÁĚÉÍÓÚČĎŘŤŽ\s]+)\s\W\s(?P<description>[a-záéíóýúčďňřěťžš\s\,\.]+)", s_.text, re.MULTILINE)
