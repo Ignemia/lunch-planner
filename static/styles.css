@@ -1,0 +1,41 @@
+/* static/styles.css */
+body {
+    font-family: "Poppins", sans-serif;
+}
+
+/* Restaurant Card (Island) Styling */
+.user-indicator.green {
+    background-color: darkgreen;
+}
+.user-indicator.red {
+    background-color: darkred;
+}
+
+.menu-section li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5em 1em;
+}
+
+.menu-section li:nth-of-type(2n + 1) {
+    background-color: #ededed;
+}
+
+/* Chat Styling */
+.chat-message.self {
+    margin-left: auto; /* Pushes message to the right */
+}
+
+.chat-message.other {
+    margin-right: auto; /* Pushes message to the left */
+}
+
+#chat-messages {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Utility class */
+.hidden {
+    display: none;
+}

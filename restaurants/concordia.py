@@ -63,7 +63,10 @@ class Concordia(ARestaurant):
         # Parsing soups and drinks
         soups = __menu_html.findAll(class_="polevka")
         for s_ in soups:
-            price_soup = s_.find(class_="cena").text
+            price_soup = s_.find(class_="cena")
+            if price_soup is None:
+                continue
+            price_html = price_soup.text
             # Check if this is a drink (contains volume in liters)
             drink_match = re.search(r"^.*(\d+[\.,]?\d*)\s*L", s_.text, re.IGNORECASE | re.MULTILINE)
             if drink_match:
@@ -72,7 +75,7 @@ class Concordia(ARestaurant):
                 drink_volume_match = re.match(r".*(\d+\,\s\d+)L", drink_match[0], re.IGNORECASE)
                 assert drink_volume_match is not None
                 volume = float(drink_volume_match.group(1).replace(",", ".").replace(" ", ""))
-                price_czk_match = re.match(r"\d+", price_soup)
+                price_czk_match = re.match(r"\d+", price_html)
                 assert price_czk_match is not None
 
                 menu.add_drink(drink_name_match[0].strip(), volume, int(price_czk_match[0]))
@@ -81,7 +84,7 @@ class Concordia(ARestaurant):
                 soup_name_match = re.match(r"^(?P<name>[A-ZÁÉĚÍÓÚČĎŘŤŽ\s]+)\s\W", s_.text)
                 assert soup_name_match is not None
                 soup_item = Soup(soup_name_match.group("name").strip(), 0, MEAL_AMOUNT_UNITS.ML, [])
-                price_czk_match = re.match(r"\d+", price_soup)
+                price_czk_match = re.match(r"\d+", price_soup.text)
                 if price_czk_match is not None:
                     soup_item.set_price(int(price_czk_match[0]))
                 soup_description_match = re.match(r"^(?P<name>[A-ZÁĚÉÍÓÚČĎŘŤŽ\s]+)\s\W\s(?P<description>[a-záéíóýúčďňřěťžš\s\,\.]+)", s_.text, re.MULTILINE)
@@ -95,6 +98,8 @@ class Concordia(ARestaurant):
         for mm_ in main_meals:
             price_soup = mm_.find(class_="cena").text
             main_meal_name_match = re.search(r"(?P<name>[A-ZÁÉĚÍÓÚČĎŘŤŽ\s]+)\s\W.*", mm_.text)
+            if main_meal_name_match is None:
+                continue
             assert main_meal_name_match is not None
             main_meal_item = MainMeal(main_meal_name_match.group("name").strip(), 0, MEAL_AMOUNT_UNITS.ML, [])
             price_czk_match = re.match(r"\d+", price_soup)

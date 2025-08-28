@@ -1,16 +1,18 @@
+# main.py
+from ws import start
 from restaurants import Bruxx, NaPasece, PizzeriaEinstein, Kravin, Concordia
 
-REGISTERED_RESTAURANTS = set()
-
 def initialize_restaurants():
-    REGISTERED_RESTAURANTS.add(Bruxx())
-    REGISTERED_RESTAURANTS.add(NaPasece())
-    REGISTERED_RESTAURANTS.add(PizzeriaEinstein())
-    REGISTERED_RESTAURANTS.add(Kravin())
-    REGISTERED_RESTAURANTS.add(Concordia())
+    # Initialize the concrete restaurant instances and return them
+    restaurants = set()
+    restaurants.add(Bruxx.get_instance(Bruxx, "Bruxx"))
+    restaurants.add(NaPasece.get_instance(NaPasece, "NaPasece"))
+    restaurants.add(PizzeriaEinstein.get_instance(PizzeriaEinstein, "PizzeriaEinstein"))
+    restaurants.add(Kravin.get_instance(Kravin, "Kravin"))
+    restaurants.add(Concordia.get_instance(Concordia, "Concordia"))
+
+    return restaurants
 
 if __name__ == "__main__":
-    initialize_restaurants()
-    for restaurant in REGISTERED_RESTAURANTS:
-        restaurant.fetch_menu()
-        print(f"""{restaurant.get_name()}({restaurant.get_distance()}m)<\n\t{restaurant.get_menu_string()}>""")
+    # Pass the initialize_restaurants function to the server to start the app
+    start(initialize_restaurants)

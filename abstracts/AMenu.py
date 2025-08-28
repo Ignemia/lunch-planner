@@ -70,3 +70,6 @@ class AMenu:
         for id, mm in enumerate(self.meals["main_meals"]):
             out += f"\t\t{(id+1)} - {str(mm)}\n"
         return out
+
+    def get_main_meals(self):
+        return self.meals["main_meals"]
