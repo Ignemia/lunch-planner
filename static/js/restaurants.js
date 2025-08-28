@@ -51,8 +51,9 @@ function createRestaurantCard(restaurant) {
           .map(
             (item) => `
               <li class="w-full text-sm text-slate-500">
-                <span class="w-3/4">${item.name}</span>
-                <span class="w-1/4 text-right">${item.price} CZK</span>
+                <span class="w-${!item.allergens.length ? 5 : 4}/6">${item.name}</span>
+                <span class="w-1/6 ${!item.allergens.length ? "hidden" : ""} text-center">${item.allergens.join(" , ")}</span>
+                <span class="w-1/6 text-right">${item.price} CZK</span>
               </li>`,
           )
           .join("")}

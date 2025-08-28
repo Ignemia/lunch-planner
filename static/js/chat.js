@@ -8,7 +8,9 @@ function initializeChat(restaurantName, username) {
   const chatInput = document.getElementById("chat-input");
   chatMessages.innerHTML = ""; // Clear old messages
 
-  const socket = new WebSocket(`ws://[]:8000/ws/${restaurantName}/${username}`);
+  const socket = new WebSocket(
+    `ws://127.0.0.1:8000/ws/${restaurantName}/${username}`,
+  );
   currentSocket = socket;
 
   socket.onopen = () => {
