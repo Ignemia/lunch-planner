@@ -1,16 +1,16 @@
 # ws/server.py
 import uvicorn
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Query
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 import json
 from typing import Set, Dict
+from collections import defaultdict
 
 # Import ARestaurant abstract class
 from abstracts.ARestaurant import ARestaurant
 from abstracts.AMenu import AMenu
 from abstracts.AMeal import AMeal
-
 app = FastAPI()
 
 # Serve static files (HTML, JS, CSS)
@@ -119,47 +119,89 @@ async def get_menu_item_allergens(restaurant_name: str, menu_item_id: int):
     else:
         return {"error": "Restaurant or menu item not found"}
 
-# WebSocket for lunch group registration and live chat
-@app.websocket("/ws/{restaurant_name}/{group_name}")
-async def websocket_endpoint(websocket: WebSocket, restaurant_name: str, group_name: str):
-    # Connect WebSocket
+
+# Store lunch groups and user counts
+lunch_groups = defaultdict(lambda: {"members": [], "chat": []})
+user_counts = {}
+
+@app.websocket("/ws/{restaurant_name}")
+async def websocket_endpoint(websocket: WebSocket, restaurant_name: str, user_name: str = Query(...)):
+    # Accept WebSocket connection
     await websocket.accept()
 
-    # Create or retrieve group for the lunch event
-    if group_name not in lunch_groups:
-        lunch_groups[group_name] = {
-            "restaurant_name": restaurant_name,
-            "members": [],
-            "chat": []
-        }
+    # Check if the user already exists in the group
+    group = lunch_groups.setdefault(restaurant_name, {"members": [], "chat": []})
+    if user_name not in [member["name"] for member in group["members"]]:
+        group["members"].append({"name": user_name, "websocket": websocket})
+        user_counts[restaurant_name] = len(group["members"])
 
-    group = lunch_groups[group_name]
-    group["members"].append(websocket)
-    user_counts[restaurant_name] += 1  # Increment the user count
-
-    # Notify members about new arrival
     for member in group["members"]:
-        await member.send_text(f"New member joined: {websocket.client.host}. Total: {user_counts[restaurant_name]} people.")
+            if member["name"] == user_name:
+                for chat_message in group["chat"]:
+                    await member["websocket"].send_json(chat_message)
+
+    # Notify all members about the new arrival
+    for member in group["members"]:
+        await member["websocket"].send_json({
+            "sender": "system",
+            "message": f"{user_name} has joined the group! Total: {user_counts[restaurant_name]} people."
+        })
 
     try:
         while True:
-            # Wait for incoming messages in the chat
+            # Wait for incoming messages
             data = await websocket.receive_text()
-            # Broadcast chat message to the group
-            group["chat"].append(data)
-            for member in group["members"]:
-                await member.send_text(f"{websocket.client.host}: {data}")
-    except WebSocketDisconnect:
-        group["members"].remove(websocket)
-        user_counts[restaurant_name] -= 1  # Decrement the user count
-        group["chat"].append(f"{websocket.client.host} has left the group.")
-        # Notify other members
-        for member in group["members"]:
-            await member.send_text(f"{websocket.client.host} has left the group.")
 
-    # Clean up if group is empty
-    if len(group["members"]) == 0:
-        del lunch_groups[group_name]
+            # Check if it's a command
+            if data.startswith("/"):
+                command = data[1:].strip()  # Remove '/' to get the command
+                await handle_command(command, restaurant_name, user_name)
+            else:
+                # Regular chat message
+                chat_message = {"sender": user_name, "message": data}
+                group["chat"].append(chat_message)
+                # Broadcast the chat message to all members
+                for member in group["members"]:
+                    if member["name"] == user_name:
+                        continue
+                    await member["websocket"].send_json(chat_message)
+
+    except WebSocketDisconnect:
+        # Handle user disconnection
+        group["members"] = [member for member in group["members"] if member["name"] != user_name]
+        user_counts[restaurant_name] = len(group['members'])
+        for member in group["members"]:
+            await member["websocket"].send_json({
+                "sender": "system",
+                "message": f"{user_name} has left the group."
+            })
+
+        # Cleanup if no members are left in the group
+        if len(group["members"]) == 0:
+            del lunch_groups[restaurant_name]
+
+
+# Command handler example (e.g., for '/kick')
+async def handle_command(command: str, restaurant_name: str, user_name: str):
+    group = lunch_groups[restaurant_name]
+
+    if command.startswith("kick"):
+        _, target_user = command.split(" ", 1)
+        target_user = target_user.strip()
+
+        # Find the target user and remove them
+        target_member = next((member for member in group["members"] if member["name"] == target_user), None)
+        if target_member:
+            group["members"].remove(target_member)
+            user_counts[restaurant_name] -= 1
+            await target_member["websocket"].send_text(f"You have been kicked out by {user_name}.")
+            # Notify others
+            for member in group["members"]:
+                await member["websocket"].send_text(f"{user_name} kicked {target_user} out of the group.")
+        else:
+            # If the user is not found
+            await group["members"][0]["websocket"].send_text(f"User {target_user} not found in the group.")
+
 
 # Serve the main HTML page
 @app.get("/")

@@ -9,29 +9,34 @@ function initializeChat(restaurantName, username) {
   chatMessages.innerHTML = ""; // Clear old messages
 
   const socket = new WebSocket(
-    `ws://127.0.0.1:8000/ws/${restaurantName}/${username}`,
+    `ws://127.0.0.1:8000/ws/${restaurantName}?user_name=${username}`,
   );
   currentSocket = socket;
 
   socket.onopen = () => {
     console.log(`Connected to chat for ${restaurantName}`);
     addChatMessage(
-      { sender: "System", message: "You have joined the chat." },
-      "other",
+      { sender: "system", message: "You have joined the chat." },
+      "system",
     );
   };
 
   socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
-    const type = data.sender === currentUsername ? "self" : "other";
+    const type =
+      data.sender === currentUsername
+        ? "self"
+        : data.send === "system"
+          ? "system"
+          : "other";
     addChatMessage(data, type);
   };
 
   socket.onclose = () => {
     console.log("Connection closed");
     addChatMessage(
-      { sender: "System", message: "You have been disconnected." },
-      "other",
+      { sender: "system", message: "You have been disconnected." },
+      "system",
     );
   };
 
@@ -51,7 +56,7 @@ function addChatMessage(data, type) {
   const messageElement = document.createElement("div");
   messageElement.className = `p-3 rounded-lg max-w-xs chat-message ${type == "self" ? "self bg-green-100 text-green-900 self-end" : "other bg-slate-200 text-slate-900 self-start"}`;
   const sender = type === "self" ? "You" : data.sender;
-  messageElement.innerHTML = `<strong>${sender}:</strong><p>${data.message}</p>`;
+  messageElement.innerHTML = `${sender != "system" ? "<strong>" + sender + ": </strong>" : "<i>"}${data.message}${sender == "system" ? "</i>" : ""}`;
   chatMessages.appendChild(messageElement);
   chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll to bottom
 }
