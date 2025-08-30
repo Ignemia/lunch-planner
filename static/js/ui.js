@@ -1,8 +1,12 @@
 // /static/js/ui.js
 function joinLunchGroup(restaurant) {
-  const username = prompt("Please enter your name for the chat:");
-  if (!username) return;
-
+  let username = localStorage.getItem("username");
+  if (username === null || username === "") {
+    username = prompt("Please enter your name for the chat:");
+    if (!username) return;
+    localStorage.setItem("username", username);
+  }
+  
   // Switch views
   document.getElementById("restaurants-view").classList.add("hidden");
   document.getElementById("joined-view").classList.remove("hidden");
