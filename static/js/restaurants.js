@@ -26,7 +26,7 @@ async function fetchRestaurants() {
 function createRestaurantCard(restaurant) {
   const card = document.createElement("div");
   card.className =
-    "restaurant-card bg-white p-6 rounded-xl shadow-lg flex flex-col transition-transform duration-300 hover:-translate-y-2 md:w-full xl:w-1/2 3xl:w-1/3";
+    "restaurant-card bg-white p-6 rounded-xl shadow-lg flex flex-col transition-transform duration-300 hover:-translate-y-2 md:w-full";
 
   const userCount = restaurant.user_count || 0;
   const indicatorColor = userCount > 0 ? "green" : "red";
